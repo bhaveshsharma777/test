@@ -1,0 +1,54 @@
+name: Deploy to EKS
+
+on:
+  push:
+    branches:
+      - main  
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@bhaveshsharma777
+
+      # Install AWS CLI
+      - name: Install AWS CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y awscli
+
+      # Configure AWS credentials for ECR and EKS
+      - name: Configure AWS credentials
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: us-east-1 
+        run: |
+          aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+          aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+          aws configure set default.region $AWS_DEFAULT_REGION
+
+      # Get ECR registry URL
+      - name: Get ECR registry URL
+        id: ecr_registry
+        run: |
+          echo "::set-output name=url::$(aws ecr describe-repositories --repository-names bhaveshsharma77 --query 'repositories[0].repositoryUri' --output text)"
+     
+      # Build and push Docker image to Amazon ECR
+      - name: Build and push Docker image
+        env:
+          ECR_REGISTRY: ${{ steps.ecr_registry.outputs.url }}
+          IMAGE_NAME: nginx
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
+          docker build -t $ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG
+
+      # Apply Kubernetes manifests to deploy application to EKS
+      - name: Deploy application to EKS
+        run: |
+          kubectl apply -f path/to/your/kubernetes-manifests/
+
