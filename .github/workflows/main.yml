@@ -11,7 +11,7 @@ jobs:
     
     steps:
       - name: Checkout repository
-        uses: actions/checkout@bhaveshsharma777
+        uses: actions/checkout@v2
 
       # Install AWS CLI
       - name: Install AWS CLI
