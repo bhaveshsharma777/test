@@ -18,8 +18,8 @@ spec:
         app: testing
     spec:
       containers:
-      - image: nginx
-        name: nginx
+      - image: python:3.9-slim
+        name: python:3.9-slim
         resources: {}
 status: {}
 
