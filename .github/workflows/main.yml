@@ -43,7 +43,7 @@ jobs:
           IMAGE_NAME: python:3.9-slim
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          $(aws ecr get-login --no-include-email --region us-east-1)
+          $(aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY)
           docker build -t $ECR_REGISTRY/$IMAGE_NAME:bhavesh.
           docker push $ECR_REGISTRY/$IMAGE_NAME:bhavesh
 
