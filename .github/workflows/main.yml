@@ -50,5 +50,5 @@ jobs:
       # Apply Kubernetes manifests to deploy application to EKS
       - name: Deploy application to EKS
         run: |
-          kubectl apply -f path/to/your/kubernetes-manifests/
+          kubectl apply -f test/deployment.yaml
 
