@@ -43,9 +43,9 @@ jobs:
           IMAGE_NAME: python:3.9-slim
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
-          docker build -t $ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG
+          $(aws ecr get-login --no-include-email --region us-east-1)
+          docker build -t $ECR_REGISTRY/$IMAGE_NAME:bhavesh.
+          docker push $ECR_REGISTRY/$IMAGE_NAME:bhavesh
 
       # Apply Kubernetes manifests to deploy application to EKS
       - name: Deploy application to EKS
