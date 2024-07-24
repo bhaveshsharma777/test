@@ -40,7 +40,7 @@ jobs:
       - name: Build and push Docker image
         env:
           ECR_REGISTRY: ${{ steps.ecr_registry.outputs.url }}
-          IMAGE_NAME: nginx
+          IMAGE_NAME: python:3.9-slim
           IMAGE_TAG: ${{ github.sha }}
         run: |
           $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
