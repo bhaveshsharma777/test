@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: testing
+  name: testing
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: testing
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: testing
+    spec:
+      containers:
+      - image: nginx
+        name: nginx
+        resources: {}
+status: {}
+
+---
+
+kind: Service
+metadata:
+  name: testing-service
+  namespace: default  # Adjust if using a different namespace
+spec:
+  selector:
+    app: testing
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: ClusterIP
