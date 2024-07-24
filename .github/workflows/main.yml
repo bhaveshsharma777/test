@@ -41,11 +41,12 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.ecr_registry.outputs.url }}
           IMAGE_NAME: python:3.9-slim
-          IMAGE_TAG: ${{ github.sha }}
+          IMAGE_TAG: bhavesh
         run: |
-          $(aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY)
-          docker build -t $ECR_REGISTRY/$IMAGE_NAME:bhavesh.
-          docker push $ECR_REGISTRY/$IMAGE_NAME:bhavesh
+          $(aws configure set default.region $AWS_DEFAULT_REGION 
+          aws ecr get-login-password | docker login --username AWS --password-stdin $ECR_REGISTRY)
+          docker build -t $ECR_REGISTRY/bhavesh
+          docker push $ECR_REGISTRY/bhavesh
 
       # Apply Kubernetes manifests to deploy application to EKS
       - name: Deploy application to EKS
